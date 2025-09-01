@@ -21,6 +21,6 @@ module.exports = fp(async (fastify) => {
   // Disconnect Prisma when server shuts down
   fastify.addHook("onClose", async (app) => {
     await app.prisma.$disconnect();
-    fastify.log.info("🔌 Disconnected from PostgreSQL");
+    fastify.log.info("Disconnected from PostgreSQL");
   });
 });
