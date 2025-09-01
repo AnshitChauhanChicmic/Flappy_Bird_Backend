@@ -57,7 +57,8 @@ userController.login = async (req, res) => {
   if(user){
     const matchPassword = await common.comparePassword(password, user.password);
     if(matchPassword){
-      return res.send({message: 'Login successfully'})
+      let token = await common.generateJWTToken(user.id);
+      return res.send({message: 'Login successfully', accessToken: token})
     }
   }
   return res.status(401).send({message: 'Invalid email or password'})
