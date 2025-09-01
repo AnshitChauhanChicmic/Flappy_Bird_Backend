@@ -8,15 +8,8 @@ common.hashPassword = async (password) => {
   return hashedPassword;
 };
 
-common.comparePassword = (password, hashPassword) => {
-  bcrypt.compare(password, hashPassword, (err, result) => {
-    if (err) {
-      console.error("Error comparing password:", err);
-      throw err;
-    }
-
-    return result;
-  });
+common.comparePassword = async (password, hashPassword) => {
+  return await bcrypt.compare(password, hashPassword);
 };
 
 module.exports = common;

@@ -48,8 +48,19 @@ userController.googleOAuth = async (req, res) => {
     return res.send({ Error: err });
   }
 
-
   return res.send({ message: "Login successful", user });
 };
+
+userController.login = async (req, res) => {
+  const {email, password} = req.body;
+  const user = await dbServices.findUnique(req.server.prisma.user, {email});
+  if(user){
+    const matchPassword = await common.comparePassword(password, user.password);
+    if(matchPassword){
+      return res.send({message: 'Login successfully'})
+    }
+  }
+  return res.status(401).send({message: 'Invalid email or password'})
+}
 
 module.exports = userController;
