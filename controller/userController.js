@@ -20,4 +20,36 @@ userController.signup = async (req, res) => {
   }
 };
 
+userController.googleOAuth = async (req, res) => {
+  const token =
+    await req.server.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
+
+  // Fetch user info from Google
+  const userInfo = await fetch(
+    "https://www.googleapis.com/oauth2/v2/userinfo",
+    {
+      headers: { Authorization: `Bearer ${token.access_token}` },
+    }
+  ).then((res) => res.json());
+
+  try{
+    user = await req.server.prisma.user.create({
+      data: {
+        firstName: userInfo.given_name || "",
+        lastName: userInfo.family_name || "",
+        email: userInfo.email,
+        password: "",
+      },
+    });
+  }catch(err){
+    if (err.code == "P2002") {
+      return res.status(409).send({ Error: "Email already exists!" });
+    }
+    return res.send({ Error: err });
+  }
+
+
+  return res.send({ message: "Login successful", user });
+};
+
 module.exports = userController;

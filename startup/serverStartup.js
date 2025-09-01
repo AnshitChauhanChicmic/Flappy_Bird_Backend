@@ -1,7 +1,6 @@
-const prismaSetup = require("./prismaSetup");
-
 const serverStartup = async (fastify) => {
-  fastify.register(prismaSetup);
+  fastify.register(require("../plugins/prismaPlugin"));
+  fastify.register(require("../plugins/googleOAuth"));
   fastify.register(require("../routes/userRoutes"));
   try {
     await fastify.listen({ port: 3000 });
