@@ -14,6 +14,7 @@ model User {
   email     String   @unique
   password  String
   scores    Score[]
+  session   Session[]
 }
 
 model Score {
@@ -22,4 +23,13 @@ model Score {
   createdAt DateTime @default(now())
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id              Int      @id @default(autoincrement())
+  token           String
+  sessionEvents   String[]
+  expirationTime  DateTime
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
 }
