@@ -58,6 +58,13 @@ userController.login = async (req, res) => {
     const matchPassword = await common.comparePassword(password, user.password);
     if(matchPassword){
       let token = await common.generateJWTToken(user.id);
+      res.cookie('token', token, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      })
       return res.send({message: 'Login successfully', accessToken: token})
     }
   }

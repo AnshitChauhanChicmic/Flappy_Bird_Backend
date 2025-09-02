@@ -7,6 +7,10 @@ async function routes(fastify, options) {
   fastify.get('/login/google/callback', userController.googleOAuth);
 
   fastify.post('/login', {schema: schemaValidation.loginUser},userController.login)
+
+  fastify.get('/hello', (req, res) => {
+    return res.send(req.cookies.token);
+  })
 }
 
 module.exports = routes;

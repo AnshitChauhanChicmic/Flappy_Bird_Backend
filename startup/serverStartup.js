@@ -1,4 +1,5 @@
 const serverStartup = async (fastify) => {
+  fastify.register(require('@fastify/cookie'));
   fastify.register(require("../plugins/prismaPlugin"));
   fastify.register(require("../plugins/googleOAuth"));
   fastify.register(require("../routes/userRoutes"));
